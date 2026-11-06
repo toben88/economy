@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    # Fixed name so Caddy can reach it as economy:3000 over the shared "web" network
+    container_name: economy
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - economy-data:/data
+    # Only reachable from this server; the public site comes in through Caddy
+    ports:
+      - "127.0.0.1:3001:3000"
+    networks:
+      - default
+      - web
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+networks:
+  # Created once with: docker network create web
+  web:
+    external: true
+
+volumes:
+  # SQLite database and its daily backups
+  economy-data:

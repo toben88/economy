@@ -1,5 +1,18 @@
-# Secrets: the FRED API key goes in .env, never in git
+# Secrets: the FRED API key and ingest token live in .env, never in git
 .env
-# Written by the data job once live FRED data is added
-public/data.json
+.env.*
+!.env.example
+
+# Dependencies and build output
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+
+# Local SQLite database (production uses a Docker volume)
+data/
+*.db
+*.db-wal
+*.db-shm
+
 .DS_Store
