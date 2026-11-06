@@ -1,3 +1,4 @@
+import ChartBoundary from "@/components/ChartBoundary";
 import Gauge from "@/components/Gauge";
 import Sparkline from "@/components/Sparkline";
 import YieldCurveChart from "@/components/YieldCurveChart";
@@ -105,13 +106,15 @@ export default function Home() {
                     </section>
 
                     <section className="panel feature" aria-label="Yield curve chart">
-                        <YieldCurveChart points={d.curve.points} recessions={d.curve.recessions}>
-                            <h3>Yield curve: 10-year minus 3-month Treasury</h3>
-                            <p>
-                                The most reliable single recession predictor. An inversion (below zero) has preceded each of
-                                the last eight US recessions, typically by 6 to 18 months.
-                            </p>
-                        </YieldCurveChart>
+                        <ChartBoundary>
+                            <YieldCurveChart points={d.curve.points} recessions={d.curve.recessions}>
+                                <h3>Yield curve: 10-year minus 3-month Treasury</h3>
+                                <p>
+                                    The most reliable single recession predictor. An inversion (below zero) has preceded each
+                                    of the last eight US recessions, typically by 6 to 18 months.
+                                </p>
+                            </YieldCurveChart>
+                        </ChartBoundary>
                         <div className="legend">
                             <span>
                                 <i style={{ background: "var(--brand)" }} />

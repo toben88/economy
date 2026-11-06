@@ -3,22 +3,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as echarts from "echarts/core";
 import { LineChart } from "echarts/charts";
-import {
-    GridComponent,
-    MarkAreaComponent,
-    MarkLineComponent,
-    TooltipComponent,
-    VisualMapComponent,
-} from "echarts/components";
+import { GridComponent, MarkAreaComponent, MarkLineComponent, TooltipComponent } from "echarts/components";
 import { SVGRenderer } from "echarts/renderers";
 
-echarts.use([LineChart, GridComponent, TooltipComponent, MarkAreaComponent, MarkLineComponent, VisualMapComponent, SVGRenderer]);
+// No visualMap: in ECharts 6 it crashes this chart ("reading 'coord'"). Inversions are drawn as a
+// separate shaded series instead.
+echarts.use([LineChart, GridComponent, TooltipComponent, MarkAreaComponent, MarkLineComponent, SVGRenderer]);
 
 // ECharts needs plain colours, so these are sRGB equivalents of the page's oklch tokens.
 const C = {
     brand: "#4fd1bd",
     down: "#f07a6e",
-    downSoft: "rgba(240, 122, 110, 0.18)",
+    downSoft: "rgba(240, 122, 110, 0.32)",
     recession: "rgba(255, 255, 255, 0.06)",
     line: "#3b3a36",
     lineStrong: "#4f4d48",
@@ -94,22 +90,27 @@ export default function YieldCurveChart({ points, recessions, children }: Props)
                     axisLabel: { color: C.faint, fontFamily: "IBM Plex Mono, monospace", fontSize: 11, formatter: (v: number) => v.toFixed(1) },
                     splitLine: { lineStyle: { color: C.line } },
                 },
-                visualMap: {
-                    show: false,
-                    dimension: 1,
-                    pieces: [
-                        { lte: 0, color: C.down },
-                        { gt: 0, color: C.brand },
-                    ],
-                },
                 series: [
+                    {
+                        // Red fill between zero and the curve wherever it is inverted
+                        type: "line",
+                        name: "Inverted",
+                        data: visible.map(([date, v]) => [date, Math.min(v, 0)]),
+                        showSymbol: false,
+                        silent: true,
+                        lineStyle: { width: 0 },
+                        areaStyle: { origin: 0, color: C.downSoft },
+                        tooltip: { show: false },
+                        z: 1,
+                    },
                     {
                         type: "line",
                         name: "Spread",
                         data: visible,
                         showSymbol: false,
-                        lineStyle: { width: 2 },
-                        areaStyle: { origin: 0, opacity: 0.16 },
+                        lineStyle: { width: 2, color: C.brand },
+                        itemStyle: { color: C.brand },
+                        z: 2,
                         markLine: {
                             silent: true,
                             symbol: "none",
