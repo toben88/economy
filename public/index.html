@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>US Economic Outlook · Box In Stock</title>
+<meta name="description" content="Mockup of the leading, coincident and policy indicators that best predict the direction of the US economy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Colour tokens (originally from the OpenStock theme) */
+  :root {
+    --page: oklch(0.13 0.006 95);
+    --canvas: oklch(0.205 0.007 95);
+    --card: oklch(0.235 0.008 95);
+    --hover: oklch(0.27 0.008 95);
+    --line: oklch(0.29 0.008 95);
+    --line-strong: oklch(0.36 0.01 95);
+    --text: oklch(0.95 0.006 95);
+    --muted: oklch(0.74 0.012 95);
+    --faint: oklch(0.62 0.012 95);
+    --brand: oklch(0.80 0.13 176);
+    --brand-ink: oklch(0.85 0.12 176);
+    --brand-soft: oklch(0.31 0.05 176);
+    --up: oklch(0.70 0.164 150);
+    --up-soft: oklch(0.30 0.055 150);
+    --down: oklch(0.70 0.162 25);
+    --down-soft: oklch(0.30 0.055 25);
+    --warn: oklch(0.76 0.119 70);
+    --warn-soft: oklch(0.31 0.05 70);
+    --radius: 14px;
+    --sans: "Plus Jakarta Sans", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--page);
+    color: var(--text);
+    font: 15px/1.5 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--brand-ink); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 16px 64px; }
+
+  /* Header */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); }
+  .logo-mark { width: 28px; height: 28px; border-radius: 8px; background: var(--brand); display: grid; place-items: center; color: var(--page); font-weight: 800; font-size: 14px; }
+  .mock-badge { font: 500 12px/1 var(--mono); color: var(--warn); background: var(--warn-soft); padding: 7px 10px; border-radius: 999px; }
+  .top-right { display: flex; align-items: center; gap: 14px; }
+  .nav-link { font-weight: 600; font-size: 14px; color: var(--text); padding: 7px 12px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-strong); }
+  .nav-link:hover { background: var(--hover); text-decoration: none; }
+
+  h1 { font-size: clamp(26px, 4vw, 36px); line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .lede { color: var(--muted); max-width: 68ch; margin: 0; }
+  .asof { font: 400 13px var(--mono); color: var(--faint); margin-top: 10px; }
+
+  /* Summary row */
+  .summary { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; margin: 28px 0 40px; }
+  @media (max-width: 860px) { .summary { grid-template-columns: 1fr; } }
+  .panel { background: var(--canvas); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; min-width: 0; }
+  .panel h2 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 14px; }
+
+  .risk { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .gauge { flex: 0 0 auto; }
+  .risk-num { font: 600 44px/1 var(--mono); letter-spacing: -0.03em; }
+  .risk-label { color: var(--warn); font-weight: 600; margin-top: 6px; }
+  .risk-copy { color: var(--muted); font-size: 14px; flex: 1 1 220px; margin: 0; }
+
+  .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .board-cell { background: var(--card); border-radius: 10px; padding: 14px; }
+  .board-n { font: 600 28px/1 var(--mono); }
+  .board-t { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .board-cell.good .board-n { color: var(--up); }
+  .board-cell.watch .board-n { color: var(--warn); }
+  .board-cell.bad .board-n { color: var(--down); }
+  .board-note { font-size: 13px; color: var(--faint); margin: 14px 0 0; }
+
+  /* Feature chart */
+  .feature { margin-bottom: 40px; }
+  .feature-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .feature-head h3 { margin: 0; font-size: 18px; }
+  .feature-head p { margin: 4px 0 0; color: var(--muted); font-size: 14px; max-width: 60ch; }
+  .range { display: flex; gap: 4px; background: var(--card); padding: 4px; border-radius: 10px; }
+  .range button { font: 500 13px var(--mono); color: var(--muted); background: none; border: 0; padding: 6px 10px; border-radius: 7px; cursor: pointer; }
+  .range button[aria-pressed="true"] { background: var(--hover); color: var(--text); }
+  .range button:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+  .chart { width: 100%; height: 260px; display: block; }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 6px; }
+
+  /* Indicator groups */
+  .group { margin-bottom: 40px; }
+  .group-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .group-head h3 { margin: 0; font-size: 20px; letter-spacing: -0.01em; }
+  .group-head span { color: var(--faint); font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+
+  .tile { background: var(--canvas); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .tile:hover { border-color: var(--line-strong); }
+  .tile-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .tile-name { font-weight: 600; font-size: 15px; }
+  .tile-src { font: 400 12px var(--mono); color: var(--faint); }
+  .pill { font: 500 12px/1 var(--sans); padding: 6px 9px; border-radius: 999px; white-space: nowrap; }
+  .pill.good { color: var(--up); background: var(--up-soft); }
+  .pill.watch { color: var(--warn); background: var(--warn-soft); }
+  .pill.bad { color: var(--down); background: var(--down-soft); }
+  .tile-val { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .val { font: 600 28px/1 var(--mono); letter-spacing: -0.02em; }
+  .unit { font-size: 14px; color: var(--muted); font-family: var(--sans); font-weight: 500; }
+  .chg { font: 500 13px var(--mono); }
+  .chg.pos { color: var(--up); } .chg.neg { color: var(--down); } .chg.flat { color: var(--muted); }
+  .spark { width: 100%; height: 44px; display: block; }
+  .why { font-size: 13px; color: var(--muted); margin: 0; }
+  .meta { display: flex; justify-content: space-between; gap: 8px; font: 400 12px var(--mono); color: var(--faint); border-top: 1px solid var(--line); padding-top: 10px; margin-top: auto; }
+
+  footer { border-top: 1px solid var(--line); padding-top: 20px; color: var(--faint); font-size: 13px; }
+  footer p { margin: 0 0 8px; max-width: 80ch; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="logo" href="/"><span class="logo-mark">B</span>Box In Stock</a>
+    <div class="top-right"><a class="nav-link" href="https://london.ftp.sh/dashboard">Stocks ↗</a><span class="mock-badge">MOCKUP · SAMPLE DATA</span></div>
+  </header>
+
+  <h1>US Economic Outlook</h1>
+  <p class="lede">The twelve indicators with the best record of signalling where the US economy is heading. Leading indicators turn first, labor and growth confirm, and inflation and policy set the backdrop.</p>
+  <p class="asof">Values on this page are illustrative placeholders, not live data.</p>
+
+  <section class="summary" aria-label="Summary">
+    <div class="panel">
+      <h2>12-month recession risk</h2>
+      <div class="risk">
+        <svg class="gauge" width="150" height="88" viewBox="0 0 150 88" role="img" aria-label="Recession risk gauge at 32 percent">
+          <path d="M15 80 A60 60 0 0 1 135 80" fill="none" stroke="var(--card)" stroke-width="14" stroke-linecap="round"/>
+          <path id="gauge-arc" d="M15 80 A60 60 0 0 1 135 80" fill="none" stroke="var(--warn)" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="32 100"/>
+        </svg>
+        <div>
+          <div class="risk-num">32%</div>
+          <div class="risk-label">Moderate</div>
+        </div>
+        <p class="risk-copy">A composite reading of the yield curve, credit spreads, jobless claims and the Sahm rule. Above 50% has preceded every recession since 1970 in back-tests of models like this one.</p>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Signal board</h2>
+      <div class="board" id="board"></div>
+      <p class="board-note">Each indicator is scored against its own historical recession thresholds.</p>
+    </div>
+  </section>
+
+  <section class="panel feature" aria-label="Yield curve chart">
+    <div class="feature-head">
+      <div>
+        <h3>Yield curve: 10-year minus 3-month Treasury</h3>
+        <p>The single most reliable recession predictor. An inversion (below zero) has preceded each of the last eight US recessions, typically by 6 to 18 months.</p>
+      </div>
+      <div class="range" role="group" aria-label="Time range">
+        <button type="button" data-range="24" aria-pressed="false">2Y</button>
+        <button type="button" data-range="60" aria-pressed="true">5Y</button>
+        <button type="button" data-range="120" aria-pressed="false">10Y</button>
+      </div>
+    </div>
+    <svg class="chart" id="curve" role="img" aria-label="Yield curve spread over time"></svg>
+    <div class="legend">
+      <span><i style="background:var(--brand)"></i>Spread (percentage points)</span>
+      <span><i style="background:var(--down-soft)"></i>Inverted, below zero</span>
+    </div>
+  </section>
+
+  <div id="groups"></div>
+
+  <footer>
+    <p><strong>About this mockup.</strong> Numbers and trends are sample values chosen to show the layout. A live version would pull FRED series (IDs shown on each tile) with a free API key and refresh hourly; ISM PMI and the Conference Board LEI are licensed data and would need a paid source.</p>
+    <p>Not investment advice.</p>
+  </footer>
+</div>
+
+<script>
+// Deterministic pseudo-random walk so the mockup looks the same on every load
+function series(seed, n, start, end, vol) {
+  let s = seed, out = [];
+  const rand = () => { s = (s * 16807) % 2147483647; return s / 2147483647 - 0.5; };
+  let noise = 0;
+  for (let i = 0; i < n; i++) {
+    noise = noise * 0.7 + rand() * vol;
+    out.push(start + (end - start) * (i / (n - 1)) + noise);
+  }
+  out[n - 1] = end;
+  return out;
+}
+
+const GROUPS = [
+  {
+    title: "Leading indicators", note: "Turn 6–18 months before the economy does",
+    items: [
+      { name: "Yield curve (10Y–3M)", val: "+0.42", unit: "pp", chg: "+0.18", dir: "pos", status: "good", label: "Un-inverted",
+        why: "Inversion signals tight money ahead; this curve is positive again.", lead: "6–18 mo lead", src: "FRED T10Y3M", data: series(11, 36, -1.2, 0.42, 0.25) },
+      { name: "Initial jobless claims", val: "231K", unit: "4-wk avg", chg: "+9K", dir: "neg", status: "watch", label: "Rising",
+        why: "Weekly and timely. A sustained climb above ~250K has marked past downturns.", lead: "3–6 mo lead", src: "FRED ICSA", data: series(23, 36, 212, 231, 6) },
+      { name: "ISM Manufacturing PMI", val: "49.1", unit: "index", chg: "+0.7", dir: "pos", status: "watch", label: "Contracting",
+        why: "Below 50 means factories are shrinking. New orders (50.3) are improving.", lead: "3–6 mo lead", src: "ISM (licensed)", data: series(37, 36, 47.2, 49.1, 0.9) },
+      { name: "Building permits", val: "1.41M", unit: "SAAR", chg: "−2.1%", dir: "neg", status: "watch", label: "Softening",
+        why: "Housing reacts first to interest rates and leads construction jobs.", lead: "6–12 mo lead", src: "FRED PERMIT", data: series(41, 36, 1.52, 1.41, 0.03) },
+      { name: "Consumer sentiment", val: "63.8", unit: "index", chg: "−1.4", dir: "neg", status: "watch", label: "Weak",
+        why: "Expectations shape spending, which is about two-thirds of GDP.", lead: "3–9 mo lead", src: "FRED UMCSENT", data: series(53, 36, 69, 63.8, 2.2) },
+      { name: "High-yield credit spread", val: "3.35", unit: "pp", chg: "+0.11", dir: "neg", status: "good", label: "Calm",
+        why: "Lenders demand more yield when they fear defaults. Above ~6 pp is stress.", lead: "1–6 mo lead", src: "FRED BAMLH0A0HYM2", data: series(67, 36, 3.9, 3.35, 0.2) },
+      { name: "Leading Economic Index", val: "−0.2%", unit: "m/m", chg: "6 of 8 down", dir: "neg", status: "bad", label: "Declining",
+        why: "Combines ten leading series. A long run of declines is a classic warning.", lead: "6–12 mo lead", src: "Conference Board (licensed)", data: series(71, 36, 104, 99.1, 0.3) },
+    ]
+  },
+  {
+    title: "Labor market", note: "Confirms what leading indicators predicted",
+    items: [
+      { name: "Unemployment rate", val: "4.3", unit: "%", chg: "+0.1", dir: "neg", status: "watch", label: "Drifting up",
+        why: "Sahm rule reading 0.27; it has signalled a recession at 0.50 every time since 1970.", lead: "Coincident", src: "FRED UNRATE · SAHMREALTIME", data: series(83, 36, 3.7, 4.3, 0.06) },
+      { name: "Nonfarm payrolls", val: "+118K", unit: "per month", chg: "3-mo avg 131K", dir: "flat", status: "good", label: "Growing",
+        why: "Below ~100K a month is not enough to keep unemployment steady.", lead: "Coincident", src: "FRED PAYEMS", data: series(97, 36, 230, 118, 30) },
+    ]
+  },
+  {
+    title: "Growth", note: "The scoreboard, reported with a lag",
+    items: [
+      { name: "Real GDP growth", val: "1.9", unit: "% SAAR", chg: "−0.6", dir: "neg", status: "good", label: "Below trend",
+        why: "Long-run trend is about 2%. Two negative quarters is the popular recession rule.", lead: "Lagging", src: "FRED A191RL1Q225SBEA", data: series(101, 12, 2.8, 1.9, 0.7) },
+    ]
+  },
+  {
+    title: "Inflation and policy", note: "Sets how much room the Fed has to respond",
+    items: [
+      { name: "Core PCE inflation", val: "2.7", unit: "% y/y", chg: "−0.1", dir: "pos", status: "watch", label: "Above target",
+        why: "The Fed's preferred gauge. The target is 2%; above it keeps rates higher.", lead: "Lagging", src: "FRED PCEPILFE", data: series(113, 36, 3.4, 2.7, 0.08) },
+      { name: "Fed funds rate", val: "3.50–3.75", unit: "%", chg: "−0.25 last mtg", dir: "pos", status: "good", label: "Easing",
+        why: "Rate cuts support growth with a lag of 12 to 18 months.", lead: "Policy", src: "FRED DFEDTARU", data: series(127, 36, 5.375, 3.625, 0.02) },
+    ]
+  },
+];
+
+const STATUS_TEXT = { good: "Healthy", watch: "Watch", bad: "Warning" };
+
+function sparkPath(data, w, h, pad = 3) {
+  const min = Math.min(...data), max = Math.max(...data), span = max - min || 1;
+  return data.map((v, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = pad + (1 - (v - min) / span) * (h - pad * 2);
+    return (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1);
+  }).join(" ");
+}
+
+function renderGroups() {
+  const root = document.getElementById("groups");
+  const counts = { good: 0, watch: 0, bad: 0 };
+  root.innerHTML = GROUPS.map(g => `
+    <section class="group">
+      <div class="group-head"><h3>${g.title}</h3><span>${g.note}</span></div>
+      <div class="grid">
+        ${g.items.map(it => {
+          counts[it.status]++;
+          const color = it.status === "good" ? "var(--up)" : it.status === "bad" ? "var(--down)" : "var(--warn)";
+          return `
+          <article class="tile">
+            <div class="tile-top">
+              <div><div class="tile-name">${it.name}</div></div>
+              <span class="pill ${it.status}">${it.label}</span>
+            </div>
+            <div class="tile-val"><span class="val">${it.val}</span><span class="unit">${it.unit}</span><span class="chg ${it.dir}">${it.chg}</span></div>
+            <svg class="spark" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true">
+              <path d="${sparkPath(it.data, 200, 44)}" fill="none" stroke="${color}" stroke-width="1.75" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+            </svg>
+            <p class="why">${it.why}</p>
+            <div class="meta"><span>${it.lead}</span><span>${it.src}</span></div>
+          </article>`;
+        }).join("")}
+      </div>
+    </section>`).join("");
+
+  document.getElementById("board").innerHTML = ["good", "watch", "bad"].map(k =>
+    `<div class="board-cell ${k}"><div class="board-n">${counts[k]}</div><div class="board-t">${STATUS_TEXT[k]}</div></div>`
+  ).join("");
+}
+
+// Yield curve: 10 years of monthly sample data, inverted through the middle stretch
+const CURVE = (() => {
+  const a = series(7, 60, 1.6, 0.3, 0.18);
+  const b = series(9, 36, 0.1, -1.4, 0.2);
+  const c = series(13, 24, -1.2, 0.42, 0.15);
+  return a.concat(b, c);
+})();
+
+function renderCurve(months) {
+  const svg = document.getElementById("curve");
+  const W = svg.clientWidth || 800, H = 260, L = 40, R = 10, T = 12, B = 26;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const data = CURVE.slice(-months);
+  const min = Math.min(-0.5, ...data), max = Math.max(0.5, ...data);
+  const x = i => L + (i / (data.length - 1)) * (W - L - R);
+  const y = v => T + (1 - (v - min) / (max - min)) * (H - T - B);
+
+  let out = "";
+  // Gridlines
+  const step = (max - min) > 2.5 ? 1 : 0.5;
+  for (let v = Math.ceil(min / step) * step; v <= max + 1e-9; v += step) {
+    out += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/>`;
+    out += `<text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--faint)">${v.toFixed(1)}</text>`;
+  }
+  // Inverted shading: fill between line and zero where below zero
+  const zero = y(0);
+  let area = `M${x(0)} ${zero}`;
+  data.forEach((v, i) => { area += ` L${x(i)} ${y(Math.min(v, 0))}`; });
+  area += ` L${x(data.length - 1)} ${zero} Z`;
+  out += `<path d="${area}" fill="var(--down-soft)"/>`;
+  out += `<line x1="${L}" x2="${W - R}" y1="${zero}" y2="${zero}" stroke="var(--line-strong)" stroke-width="1.5"/>`;
+  // Line
+  const line = data.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1)).join(" ");
+  out += `<path d="${line}" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linejoin="round"/>`;
+  // End marker and label
+  const lx = x(data.length - 1), ly = y(data[data.length - 1]);
+  out += `<circle cx="${lx}" cy="${ly}" r="4" fill="var(--brand)"/>`;
+  // X labels: years back
+  const years = months / 12;
+  for (let k = 0; k <= years; k += years > 5 ? 2 : 1) {
+    const i = data.length - 1 - k * 12;
+    if (i < 0) continue;
+    out += `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--faint)">${k === 0 ? "Now" : "−" + k + "Y"}</text>`;
+  }
+  svg.innerHTML = out;
+}
+
+let range = 60;
+document.querySelectorAll(".range button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    range = +btn.dataset.range;
+    document.querySelectorAll(".range button").forEach(b => b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
+    renderCurve(range);
+  });
+});
+window.addEventListener("resize", () => renderCurve(range));
+
+renderGroups();
+renderCurve(range);
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Secrets: the FRED API key goes in .env, never in git
+.env
+# Written by the data job once live FRED data is added
+public/data.json
+.DS_Store
