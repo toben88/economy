@@ -44,10 +44,35 @@ export function monthlyLast(points: Point[]): Point[] {
     return [...byMonth.values()];
 }
 
-/** The latest point on or before a date (input must be sorted). */
+/** The latest point on or before a date (input must be sorted). Binary search, so long daily series stay fast. */
 export function valueOnOrBefore(points: Point[], date: string): Point | undefined {
-    for (let i = points.length - 1; i >= 0; i--) if (points[i].date <= date) return points[i];
-    return undefined;
+    let lo = 0;
+    let hi = points.length - 1;
+    let found = -1;
+    while (lo <= hi) {
+        const mid = (lo + hi) >> 1;
+        if (points[mid].date <= date) {
+            found = mid;
+            lo = mid + 1;
+        } else hi = mid - 1;
+    }
+    return found >= 0 ? points[found] : undefined;
+}
+
+export function daysBetween(a: string, b: string): number {
+    return Math.abs(Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / 86_400_000;
+}
+
+/** True if any value since a date fell below a threshold, for example a curve that was recently inverted. */
+export function recentlyBelow(points: Point[], since: string, threshold: number): boolean {
+    return points.some((p) => p.date >= since && p.value < threshold);
+}
+
+/** Recession pattern from how many of the NBER-style measures are falling. */
+export function confirmationLevel(falling: number): { status: Status; label: string } {
+    if (falling >= 3) return { status: "bad", label: "Recession pattern" };
+    if (falling === 2) return { status: "watch", label: "Two falling" };
+    return { status: "good", label: "Not signalled" };
 }
 
 function iso(d: Date) {
@@ -69,13 +94,17 @@ export function shiftDays(date: string, days: number): string {
     return iso(d);
 }
 
-/** Percent change from the same date a year earlier, for monthly series. */
-export function yoyPct(points: Point[]): Point[] {
-    const byDate = new Map(points.map((p) => [p.date, p.value]));
+/**
+ * Percent change from a year earlier. Works for daily and weekly series too: it compares with the
+ * latest point on or before the same date last year, if that point is within `maxGapDays`.
+ */
+export function yoyPct(points: Point[], maxGapDays = 31): Point[] {
     const out: Point[] = [];
     for (const p of points) {
-        const prev = byDate.get(shiftMonths(p.date, -12));
-        if (prev !== undefined && prev !== 0) out.push({ date: p.date, value: (p.value / prev - 1) * 100 });
+        const target = shiftMonths(p.date, -12);
+        const prev = valueOnOrBefore(points, target);
+        if (!prev || prev.value === 0 || daysBetween(prev.date, target) > maxGapDays) continue;
+        out.push({ date: p.date, value: (p.value / prev.value - 1) * 100 });
     }
     return out;
 }

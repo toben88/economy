@@ -40,7 +40,32 @@ a:hover { text-decoration: underline; }
 .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); }
 .logo:hover { text-decoration: none; }
 .logo-mark { width: 28px; height: 28px; border-radius: 8px; background: var(--brand); display: grid; place-items: center; color: var(--page); font-weight: 800; font-size: 14px; }
+.top-left { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
 .top-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.nav { display: flex; gap: 4px; flex-wrap: wrap; }
+.nav a { font-size: 14px; font-weight: 500; color: var(--muted); padding: 6px 10px; border-radius: 8px; }
+.nav a:hover { color: var(--text); background: var(--hover); text-decoration: none; }
+.nav a[aria-current="page"] { color: var(--text); background: var(--card); }
+
+/* Detail page status row */
+.page-counts { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 24px 0 32px; }
+.page-counts-note { font-size: 13px; color: var(--faint); margin-left: 4px; }
+
+/* Recession confirmation panel */
+.confirm { margin-bottom: 40px; }
+.confirm-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.confirm-head h2 { margin-bottom: 6px; }
+.confirm-head p { margin: 0; color: var(--muted); font-size: 14px; max-width: 70ch; }
+.confirm-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 860px) { .confirm-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .confirm-grid { grid-template-columns: 1fr; } }
+.confirm-item { background: var(--card); border-radius: 10px; padding: 14px; min-width: 0; }
+.confirm-name { font-weight: 600; font-size: 14px; }
+.confirm-chg { font: 600 18px/1.3 var(--mono); margin: 8px 0 6px; }
+.confirm-chg.pos { color: var(--up); }
+.confirm-chg.neg { color: var(--down); }
+.confirm-chg.flat { color: var(--muted); }
+.confirm-meta { font: 400 12px var(--mono); color: var(--faint); }
 .nav-link { font-weight: 600; font-size: 14px; color: var(--text); padding: 7px 12px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-strong); }
 .nav-link:hover { background: var(--hover); text-decoration: none; }
 .fresh { font: 500 12px/1 var(--mono); color: var(--muted); }

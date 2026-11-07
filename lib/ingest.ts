@@ -31,8 +31,8 @@ export async function runIngest(): Promise<IngestResult> {
             } catch (err) {
                 errors.push(`${id}: ${err instanceof Error ? err.message : String(err)}`);
             }
-            // Stay far below FRED's limit of about 120 requests a minute
-            await new Promise((r) => setTimeout(r, 300));
+            // Two requests per series; this pause keeps the run well under FRED's ~120 requests a minute
+            await new Promise((r) => setTimeout(r, 700));
         }
     } finally {
         g.__economyIngestRunning = false;

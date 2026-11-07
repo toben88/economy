@@ -1,48 +1,28 @@
 import ChartBoundary from "@/components/ChartBoundary";
 import Gauge from "@/components/Gauge";
-import Sparkline from "@/components/Sparkline";
+import SiteFooter from "@/components/SiteFooter";
+import SiteHeader from "@/components/SiteHeader";
+import TileGroups from "@/components/TileGroups";
 import YieldCurveChart from "@/components/YieldCurveChart";
-import { getDashboard } from "@/lib/dashboard";
+import { getOverview } from "@/lib/dashboard";
 
 // Read SQLite on every request, so a new daily update shows immediately
 export const dynamic = "force-dynamic";
 
-const STOCKS_URL = "https://london.ftp.sh/dashboard";
-
-function formatUpdated(iso: string) {
-    return new Date(iso).toLocaleString("en-US", {
-        timeZone: "America/New_York",
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        timeZoneName: "short",
-    });
-}
-
 export default function Home() {
-    const d = getDashboard();
+    const d = getOverview();
     const scored = d.counts.good + d.counts.watch + d.counts.bad;
 
     return (
         <div className="wrap">
-            <header className="top">
-                <a className="logo" href="/">
-                    <span className="logo-mark">B</span>Box In Stock
-                </a>
-                <div className="top-right">
-                    {d.updatedAt && <span className="fresh">Updated {formatUpdated(d.updatedAt)}</span>}
-                    <a className="nav-link" href={STOCKS_URL}>
-                        Stocks ↗
-                    </a>
-                </div>
-            </header>
+            <SiteHeader active="/" updatedAt={d.updatedAt} />
 
             <h1>US Economic Outlook</h1>
             <p className="lede">
                 The indicators with the best record of signalling where the US economy is heading. Leading indicators turn
-                first, labor and growth confirm, and inflation and policy set the backdrop. Updated daily from FRED.
+                first, financial conditions and labor confirm, and inflation and policy set the backdrop. Updated daily from
+                FRED. More indicators are on the <a href="/labor">Labor</a>, <a href="/credit">Credit</a> and{" "}
+                <a href="/activity">Activity</a> pages.
             </p>
 
             {!d.hasData ? (
@@ -98,10 +78,39 @@ export default function Home() {
                                 <strong>
                                     {d.counts.bad} of {scored}
                                 </strong>{" "}
-                                indicators are in warning territory
+                                indicators on this page are in warning territory
                                 {d.warnings.length ? `: ${d.warnings.join(", ")}.` : "."} Forward-looking, but a count of
                                 rule-based signals, not a probability.
                             </p>
+                        </div>
+                    </section>
+
+                    <section className="panel confirm" aria-label="Recession confirmation">
+                        <div className="confirm-head">
+                            <div>
+                                <h2>Is it here yet?</h2>
+                                <p>
+                                    The four measures the committee that dates US recessions watches most closely. Two or
+                                    more falling over three months is how a recession usually shows up in the data.
+                                </p>
+                            </div>
+                            <span className={`pill ${d.confirmation.status}`}>
+                                {d.confirmation.falling} of 4 falling · {d.confirmation.label}
+                            </span>
+                        </div>
+                        <div className="confirm-grid">
+                            {d.confirmation.items.map((i) => (
+                                <div className="confirm-item" key={i.name}>
+                                    <div className="confirm-name">{i.name}</div>
+                                    <div className={`confirm-chg ${i.falling === null ? "flat" : i.falling ? "neg" : "pos"}`}>
+                                        {i.falling === null ? "" : i.falling ? "▼ " : "▲ "}
+                                        {i.change}
+                                    </div>
+                                    <div className="confirm-meta">
+                                        {i.asOf} · {i.source}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </section>
 
@@ -131,50 +140,11 @@ export default function Home() {
                         </div>
                     </section>
 
-                    {d.groups.map((g) => (
-                        <section className="group" key={g.id}>
-                            <div className="group-head">
-                                <h3>{g.title}</h3>
-                                <span>{g.note}</span>
-                            </div>
-                            <div className="grid">
-                                {g.tiles.map((t) => (
-                                    <article className="tile" key={t.id}>
-                                        <div className="tile-top">
-                                            <div>
-                                                <div className="tile-name">{t.name}</div>
-                                                {t.asOf && <div className="tile-asof">{t.asOf}</div>}
-                                            </div>
-                                            <span className={`pill ${t.status}`}>{t.label}</span>
-                                        </div>
-                                        <div className="tile-val">
-                                            <span className="val">{t.value}</span>
-                                            <span className="unit">{t.unit}</span>
-                                            {t.change && <span className={`chg ${t.tone}`}>{t.change}</span>}
-                                        </div>
-                                        <Sparkline data={t.spark} status={t.status} />
-                                        <p className="why">{t.why}</p>
-                                        <div className="meta">
-                                            <span>{t.lead}</span>
-                                            <span>{t.source}</span>
-                                        </div>
-                                    </article>
-                                ))}
-                            </div>
-                        </section>
-                    ))}
+                    <TileGroups groups={d.groups} />
                 </>
             )}
 
-            <footer>
-                <p>
-                    Data from FRED, Federal Reserve Bank of St. Louis, and the original sources: BLS, BEA, the Federal
-                    Reserve Board, the University of Michigan, ICE Data Indices, the Philadelphia and Chicago Feds, and
-                    Chauvet and Piger. Warning thresholds are this site&apos;s own rules of thumb.
-                </p>
-                <p>This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.</p>
-                <p>Not investment advice.</p>
-            </footer>
+            <SiteFooter />
         </div>
     );
 }
