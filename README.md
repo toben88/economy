@@ -152,6 +152,23 @@ waiting for the next daily run.
 
 **Tests:** `npm test`. Type-check: `npm run typecheck`.
 
+## JSON API
+
+The public site at boxinstock.com is now a Flutter app that
+lives in `~/sites/boxinstock-flutter` and reads this API. The Next.js pages above still work, on
+`127.0.0.1:3001`.
+
+| Endpoint | Returns |
+|---|---|
+| `GET /api/overview` | Everything on the overview: headline, counts, confirmation panel, tile groups, chart data (`Overview` in `lib/dashboard.ts`) |
+| `GET /api/pages/<slug>` | One detail page: `labor`, `credit` or `activity` (`DetailPage` in `lib/pages.ts`); 404 otherwise |
+| `GET /api/pages/index` | The list of detail pages |
+| `GET /api/health` | Liveness and data freshness |
+
+Responses include `apiVersion` (currently 1), are cacheable for five minutes and allow any origin.
+Add fields freely, but rename or remove one only together with a new `apiVersion`, because the
+iOS app will be in people's hands and can't be updated instantly.
+
 ## Operating it
 
 ```bash
