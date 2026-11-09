@@ -130,7 +130,7 @@ docs/mockup.html        The original static mockup, kept for reference
 You need Docker and a free [FRED API key](https://fredaccount.stlouisfed.org/apikeys).
 
 ```bash
-git clone https://github.com/toben88/economy.git && cd economy
+git clone https://github.com/toben88/economy-nextjs.git && cd economy-nextjs
 cp .env.example .env               # then set FRED_API_KEY and INGEST_TOKEN
 docker network create web          # once; shared with the reverse proxy
 docker compose up -d --build
@@ -154,7 +154,7 @@ waiting for the next daily run.
 
 ## JSON API
 
-This app serves boxinstock.com. A Flutter version of the same dashboard
+This app serves boxinstock.com. A Flutter version of the same dashboard ([toben88/economy-flutter](https://github.com/toben88/economy-flutter))
 (`~/sites/boxinstock-flutter`) reads this API and is served at
 [app.boxinstock.com](https://app.boxinstock.com), which forwards `/api/*` here; the future iOS app
 will read the same endpoints.
