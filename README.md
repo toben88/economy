@@ -155,9 +155,9 @@ waiting for the next daily run.
 ## JSON API
 
 This app serves boxinstock.com. A Flutter version of the same dashboard
-(`~/sites/boxinstock-flutter`) reads this API; it is served at
-[boxinstock.com/app/](https://boxinstock.com/app/) for now and will move to its own subdomain, and
-the future iOS app will read the same endpoints.
+(`~/sites/boxinstock-flutter`) reads this API and is served at
+[app.boxinstock.com](https://app.boxinstock.com), which forwards `/api/*` here; the future iOS app
+will read the same endpoints.
 
 | Endpoint | Returns |
 |---|---|
