@@ -154,9 +154,10 @@ waiting for the next daily run.
 
 ## JSON API
 
-The public site at boxinstock.com is now a Flutter app that
-lives in `~/sites/boxinstock-flutter` and reads this API. The Next.js pages above still work, on
-`127.0.0.1:3001`.
+This app serves boxinstock.com. A Flutter version of the same dashboard
+(`~/sites/boxinstock-flutter`) reads this API; it is served at
+[boxinstock.com/app/](https://boxinstock.com/app/) for now and will move to its own subdomain, and
+the future iOS app will read the same endpoints.
 
 | Endpoint | Returns |
 |---|---|
